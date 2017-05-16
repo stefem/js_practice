@@ -1,27 +1,22 @@
-for (i = 2014; i <= 2050; i++){
-    var theDate = new Date(i, 0, 1);
-    var day = theDate.getDay();
-    var year = theDate.getFullYear();
+var input = window.prompt("Choose an integer between 1 and 10");
 
-    if (day == 0) {
-        console.log("January 1st in " + year + " will be a Sunday." )
-    } else {
-        console.log("January 1st in " + year + " will NOT be a Sunday. Lament and quail." )
-    }
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min;
 }
 
+var randInt = getRandomInt(1, 10);
+(input == randInt) ? window.alert("good work, they matched...") : window.alert("your foolishness has cost us!");
 
 /*
-elegantyer and pithier
-
-console.log('--------------------');
-for (var year = 2014; year <= 2050; year++)
-    {
-    var d = new Date(year, 0, 1);
-    if ( d.getDay() === 0 )
-        console.log("1st January is being a Sunday  "+year);
-    }
-console.log('--------------------');
+// Get a random integer from 1 to 10 inclusive
+ var num = Math.ceil(Math.random() * 10);
+ var gnum = prompt('Guess the number between 1 and 10 inclusive');
+ if (gnum == num)
+   alert('Matched');
+  else
+   alert('Not matched, the number was ' + num);
 */
 
 
