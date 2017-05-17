@@ -71,6 +71,46 @@ var x = function(){
 
 console.dir(x);
 
+/*
+In this case we can look at the object in more detail by doing console.dir(objectName).
+If you expand it, you can see something called '__proto__' - 'x' is created from this object/function. Proto can be thought to mean parent or creator. If you expand it, it has a number of methods and properties and at the end it has another '__proto__' which has its own functions and methods. This is the master / mother object and x is ultimately created form it. This is called a prototype chain.
+
+(master) object  
+    prototype   
+        properties
+        methods
+
+[Creates...]
+
+function
+    prototype   
+        properties
+        methods
+
+[Creates...]
+
+x
+    prototype   
+        properties
+        methods
+
+The real money shot here is that x can have access to all the properties and methods above it through the prototype chain. x looks up through the prototype chain to find methods or properties. It's only if it goes all the way to the master object and still can't find it that it returns undefined.
+
+So, if you create a new object from x, called 'x1', that has access to all the properties and methods above it, imncluding for example toString(), including x's.
+
+x1
+    prototype   
+        properties
+        methods
+
+
+Next tutorial:
+    Creating subClass (subConstructor)
+    Overidding the prototype chain
+    Adding prototype to Master Object
+
+*/
+
 
 
 
