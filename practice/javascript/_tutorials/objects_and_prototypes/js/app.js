@@ -65,11 +65,11 @@ alert(dayOfYear);
 // */
 
 
-var x = function(){
+// var x = function(){
 
-};
+// };
 
-console.dir(x);
+// console.dir(x);
 
 /*
 In this case we can look at the object in more detail by doing console.dir(objectName).
@@ -111,6 +111,58 @@ Next tutorial:
 
 */
 
+// 1. baseclass
+var Job = function(){
+    this.pays = true;
+};
+
+// 2. prototype method
+// Job.prototype.print = function(){
+//     console.log(this.pays ? 'Please hire me' : 'no thanks');
+// };
+
+// 3. subclass
+var TechJob = function(title, pays){
+    Job.call(this); // calls baseclass - there is also a tutorial on call, apply and bind: https://www.youtube.com/watch?v=c0mLRpw-9rI
+    this.title = title;
+    this.pays = pays;
+};
+
+// 4. Inherit prototype with its methods and properties:
+TechJob.prototype = Object.create(Job.prototype);
+TechJob.prototype.constructor = TechJob;
+
+// 5. Override print method
+// TechJob.prototype.print = function(){
+//     console.log(this.pays ? this.title + ' job is great, please hire me' : 'I would rather learn javascript');
+// };
+
+// 6. Add method to Master object
+
+Object.prototype.print = function(){
+    console.log('I am executing from the Master Object');
+};
 
 
+// here, we have a base class called 'Job' with a property called 'pays' with a default value of 'true'.
+// we also have a method called print attached to the base class object 'Job'.
+// finally, we have a subclass which is hitched to the baseclass using a call method. The call method essentially calls the constructor and pulls in the default value for, in this case, 'pays'. AT this point though, the subclass hasn;t inherited the prototypes of the baseclass.
+// Next, we want to inherit all the methods from Jobs prototype- we do this in '4'.
+// So, to recap, A. do Job.call(this) in the subclass which inherits the properties and methods defined inside the job, B. inherit from the prototype of Job as follows: TechJob.prototype = Object.create(Job.prototype); and C. Set a constructor for TechJob as follows: TechJob.prototype.constructor = TechJob;
+// Now, we can create objects from this subclass filling the parameters as set in the subclass ('3')
 
+// 5. Create object
+var softwarePosition = new TechJob('Javascript Programmer', true);
+var softwarePosition2 = new TechJob('General Arse', false);
+
+console.log(softwarePosition.print()); 
+console.log(softwarePosition2.print()); 
+
+// nb will use print method from Job.prototype
+
+// Overiding methods
+// Next we're going to override the print method - we need to do this right after where we've inherited the prototype (5). If we do it before that, it won;t work.  This works because of the prototype inheritance chain. If we call the method, it will first look in its own prototype. It will only continue looking upwards if there's nothign corresponding to that method within its own prototype.
+
+
+// Adding methods to the master object (6)
+// You'd do this so that any object yopu create has a specific method defined by yourself. This is weighty stuff. We call the master / root object in javascript simply with 'Object'
