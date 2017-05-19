@@ -1,5 +1,4 @@
 http://www.w3resource.com/javascript-exercises/javascript-functions-exercises.php
 
-Write a JavaScript function that reverse a number.
-Example x = 32243;
-Expected Output : 34223
+Write a JavaScript function that checks whether a passed string is palindrome or not? Go to the editor
+A palindrome is word, phrase, or sequence that reads the same backward as forward, e.g., madam or nurses run.
