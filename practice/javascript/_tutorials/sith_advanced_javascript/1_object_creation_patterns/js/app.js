@@ -1,168 +1,122 @@
-/*Date.prototype.isLeapYear = function() {
-    var year = this.getFullYear();
-    if((year & 3) != 0) return false;
-    return ((year % 100) != 0 || (year % 400) == 0);
-};
+// var peopleFactory = function(name, age, state){
 
-// Get Day of Year
-Date.prototype.getDOY = function() {
-    var dayCount = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
-    var mn = this.getMonth();
-    var dn = this.getDate();
-    var dayOfYear = dayCount[mn] + dn;
-    if(mn > 1 && this.isLeapYear()) dayOfYear++;
-    return dayOfYear;
-};
+//     // 1. create temporary object
+//     var temp = {};
+//     // var temp = new Object; // same difference
 
-var dayOfYear = new Date().getDOY();
-alert(dayOfYear);
-*/
+//     // 2. add three properties to the object and set them from the incoming parameters exactly liek a java set function
+//     temp.name = name;
+//     temp.age = age;
+//     temp.state = state;
 
+//     temp.printPerson = function(){
+//         console.log(this.name + " " + this.age + " " + this.state);
+//     };
 
-// var x = function(j){
-//     // 1. Add default property
-//     this.i = 0;
-
-//     // 2. Set property to passed parameter
-//     this.j = j;
-
-//     // 3. Add a getter method (returns the value of the property j)
-//     // this.getJ = function(){
-//     //     return this.j;
-//     // }
-// };
-
-// // 4. Create new instances of object
-// var x1 = new x(1);
-// var x2 = new x(2);
-
-// // 6. create prototype method
-// x.prototype.getJ = function(){
-//     return this.j;
-// }
-
-// // 5. Access new object instance properties
-// console.log(x1.getJ());
-// console.log(x2.getJ());
-
-
-
-// /*
-// In javascript - every function expression is essentially a constructor.
-// We can add default properties to it as in '1' or we can set them to passed parameters as in '2'. We can also add methods to the constructor as in '3'
-
-// ps - tis good practice to usse a capital for the first letter of a constructor name
-
-// We can create 'instances' of the object (ie 'x') from it, usinbg the keyword 'New' as in 4. and we can access the new objwects with standard notation as in 5.
-
-// Since x1 and x2 are instances of x they are actuially distinct objects but they inherit all the properties and methods from x. x is technically the parent class. So, in other words, if we create a thousand objects from x - each method would have its own object getJ which makes it, in a way, redundant in the function because (I think) this will mean the processor having to create getJ a thousand times.
-
-// The solution to this is by using the prototype method as in 6. {objectName}.prototype.{methodName} - this is automatyically available to x1 and x2 even though it's not in the function declaration. To find it, whenever we call x1 or x2, they look up the prototype chain - looks into its parent in other words - and when it finds it, it uses it.
-// This way, the objects are much smaller - you don't have to have all the methods inside the object - you can use it from the parents prototype.
-
-// So, that's the constructor in a nutshell in javascript.
-
-// */
-
-
-// var x = function(){
+//     return temp;
 
 // };
 
-// console.dir(x);
+// // This function now behave like a factory. If we want to call a new instance we simply do the following:
 
-/*
-In this case we can look at the object in more detail by doing console.dir(objectName).
-If you expand it, you can see something called '__proto__' - 'x' is created from this object/function. Proto can be thought to mean parent or creator. If you expand it, it has a number of methods and properties and at the end it has another '__proto__' which has its own functions and methods. This is the master / mother object and x is ultimately created form it. This is called a prototype chain.
+// var person1 = peopleFactory('Lilith', 97, 'mental');
+// var person2 = peopleFactory('Agnes', 42, 'serene');
 
-(master) object  
-    prototype   
-        properties
-        methods
+// // We can look at them by simply using the printPerson function:
 
-[Creates...]
-
-function
-    prototype   
-        properties
-        methods
-
-[Creates...]
-
-x
-    prototype   
-        properties
-        methods
-
-The real money shot here is that x can have access to all the properties and methods above it through the prototype chain. x looks up through the prototype chain to find methods or properties. It's only if it goes all the way to the master object and still can't find it that it returns undefined.
-
-So, if you create a new object from x, called 'x1', that has access to all the properties and methods above it, imncluding for example toString(), including x's.
-
-x1
-    prototype   
-        properties
-        methods
+// person1.printPerson();
+// person2.printPerson();
 
 
-Next tutorial:
-    Creating subClass (subConstructor)
-    Overidding the prototype chain
-    Adding prototype to Master Object
+// // functions are the most suitable way of creating objects because they behave like classes
 
-*/
 
-// 1. baseclass
-var Job = function(){
-    this.pays = true;
-};
+// var peopleConstructor = function(name, age, state){
+//     this.name = name;
+//     this.age = age;
+//     this.state = state;
 
-// 2. prototype method
-// Job.prototype.print = function(){
-//     console.log(this.pays ? 'Please hire me' : 'no thanks');
+//     this.printPerson = function(){
+//         console.log(this.name + " " + this.age + " " + this.state);
+//     };
 // };
 
-// 3. subclass
-var TechJob = function(title, pays){
-    Job.call(this); // calls baseclass - there is also a tutorial on call, apply and bind: https://www.youtube.com/watch?v=c0mLRpw-9rI
-    this.title = title;
-    this.pays = pays;
-};
+// // Unlike the factory pattern, since it doesn;t return anything, we have to create another object from the object itself. To do this, we have to use the constructor pattern, which entails using the keyword 'new':
+// var person1 = new peopleConstructor('Dipstick', 23, 'Vexed');
+// var person2 = new peopleConstructor('Lotforth', 27, 'Swayed');
 
-// 4. Inherit prototype with its methods and properties:
-TechJob.prototype = Object.create(Job.prototype);
-TechJob.prototype.constructor = TechJob;
+// person1.printPerson();
+// person2.printPerson();
 
-// 5. Override print method
-// TechJob.prototype.print = function(){
-//     console.log(this.pays ? this.title + ' job is great, please hire me' : 'I would rather learn javascript');
+// // The problem with this pattern is that every time you create another object, it takes all the methods and properties from the original which, as you might suspect, mullahs processing power asm, for the most part, they're redundant. Hence the use of prototype patterns.
+
+
+// PROTOTYPE patterns are very different ot the previous two.
+
+// var peopleProto = function(){
+
 // };
 
-// 6. Add method to Master object
+// peopleProto.prototype.age = 0;
+// peopleProto.prototype.name = "no name";
+// peopleProto.prototype.city = "no city";
+// peopleProto.prototype.printPerson = function(){
+//     console.log(this.name + ", " + this.age + ", " + this.city);
+// };
 
-Object.prototype.print = function(){
-    console.log('I am executing from the Master Object');
+// var person1 = new peopleProto(); // creates simple constructor with nothing in it
+// person1.name = "Big Mad Percival"; // adds shit
+// person1.age = 42;
+// person1.city = "Diss";
+
+// console.log('name' in person1); // returns true if name is assigned. If shadowing - ie using defaults from the prototype, it still returns true as name has been 'silently' assigned via the prototype. It goes up the inheritance chain. So we can find out, if it has the property.
+
+// console.log(person1.hasOwnProperty('name')); // this finds out whether the property exiosts specifically in person1. Thuis doesn;t look in the prototype. If you comment out name, this will return false.
+
+// person1.printPerson();
+
+// we're going to add properties and functions into a shared space called 'prototype'.
+
+// Two ways of creating methods for the object:
+// 1.  Direct:
+// Pizza.getCrust = function(){
+//     return this.crust;
+// };
+
+// 2. Putting method into the shared area:
+// Pizza.prototype.getCrust = function(){
+//     return this.crust;
+// };
+
+// Above we've created an aempty object and added properties and methods to it.
+// Don't forget though that it has initially defined defaults which in the case above we're overriding. If we were to comment out one of the property vales which we've added, say, person1.name = "Big Mad Percival"; then it would put the default in instead
+
+// the advantage of the prototype pattern is that the property printPrototype is part of the prototype space - it's not added directly to person1. WHich makes the different instances very lightweight.
+
+// disadvantage is that you first have to create an empty object and then add properties to it. Also, if you havea property as an object it can create confuision when you create multiple objects from it. To deal with this, we use...
+
+// DYNAMIC PROTOTYPE PATTERN - when creating many objects
+
+var peopleDynamicProto = function(name, age, state){
+    this.name = name;
+    this.age = age;
+    this.state = state;
+
+    if( typeof this.printPerson !== 'function' ){
+        // ie - if we don't find this function - if it's not there and returns 'undefined' (which is not a function), then we're going to create it in the prototype space.
+
+        peopleDynamicProto.prototype.printPerson = function(){
+            console.log(this.name + ", " + this.age + ", " + this.state);
+        };
+    }
+
+    // what it boils down to is that here you;re only creating the function once, the first time you create the object.
 };
 
-
-// here, we have a base class called 'Job' with a property called 'pays' with a default value of 'true'.
-// we also have a method called print attached to the base class object 'Job'.
-// finally, we have a subclass which is hitched to the baseclass using a call method. The call method essentially calls the constructor and pulls in the default value for, in this case, 'pays'. AT this point though, the subclass hasn;t inherited the prototypes of the baseclass.
-// Next, we want to inherit all the methods from Jobs prototype- we do this in '4'.
-// So, to recap, A. do Job.call(this) in the subclass which inherits the properties and methods defined inside the job, B. inherit from the prototype of Job as follows: TechJob.prototype = Object.create(Job.prototype); and C. Set a constructor for TechJob as follows: TechJob.prototype.constructor = TechJob;
-// Now, we can create objects from this subclass filling the parameters as set in the subclass ('3')
-
-// 5. Create object
-var softwarePosition = new TechJob('Javascript Programmer', true);
-var softwarePosition2 = new TechJob('General Arse', false);
-
-console.log(softwarePosition.print()); 
-console.log(softwarePosition2.print()); 
-
-// nb will use print method from Job.prototype
-
-// Overiding methods
-// Next we're going to override the print method - we need to do this right after where we've inherited the prototype (5). If we do it before that, it won;t work.  This works because of the prototype inheritance chain. If we call the method, it will first look in its own prototype. It will only continue looking upwards if there's nothign corresponding to that method within its own prototype.
+var person1 = new peopleDynamicProto('Sad Lawrence', 42, 'Little Frothing'); 
+person1.printPerson();
+console.log('name' in person1);
+console.log(person1.hasOwnProperty('name'));
 
 
-// Adding methods to the master object (6)
-// You'd do this so that any object yopu create has a specific method defined by yourself. This is weighty stuff. We call the master / root object in javascript simply with 'Object'
+

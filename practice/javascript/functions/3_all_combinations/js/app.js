@@ -25,6 +25,14 @@ function f_all_combinations(input) {
 
 document.getElementById("cn").innerText = "All combinations: " + f_all_combinations("arsebiscuits");
 
+
+
+
+
+
+
+
+
 // Alternative answer
 //Write a JavaScript function that generates all combinations of a string.
 // function substrings(str1)
