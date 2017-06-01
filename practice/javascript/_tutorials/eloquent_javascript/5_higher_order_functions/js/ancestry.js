@@ -45,9 +45,52 @@ var ANCESTRY_FILE = JSON.stringify([
 if (typeof module != "undefined" && module.exports)
   module.exports = ANCESTRY_FILE;
 
-// 0. get Length of json object
+// Get Length of json object
 var ancestry = JSON.parse(ANCESTRY_FILE);
 // console.log(ancestry.length);
+
+// 0. WORKING WITH FOREACH
+// A standard for loop can be a bit clumsy and there's a way to perform an action on each value in an array - we can write a function to do it in fact:
+
+function logEach(array){
+  for (var i = 0; i < array.length; i++){
+    console.log(array[i]);
+  }
+}
+
+//...and of course, thuis is not just limited to loggage. The sdalient point is that 'doing something', whether that be logging or anything else can be represented as a function and that in js functions count as values so, whatever we want to do can be abstracted into another function and passed as a value:
+
+// 0a. Using a predefined function:
+
+// function forEach(array, action){
+//   for (var i = 0; i < array.length; i++){
+//     action(array[i]);
+//   }
+// }
+
+// forEach(["arse biscuits!", "feck!", "girls!"], console.log);
+
+// 0b. using a function written on the schpot:
+// var numbers = [1, 2, 3, 4, 5], sum = 0;
+// forEach(numbers, function(number){
+//   sum += number;
+// });
+
+// console.log(sum);
+
+// of course, forEach already exists as a standard method on arrays and so only needs to be called with the function to be executed on each element:
+
+// var jackisms = ["Girls!", "Feck!", "Arse biscuits!"];
+// var intro = "Father Jack says";
+
+// function jackify(item){
+//   console.log(intro + ": " + item);
+// }
+
+// jackisms.forEach(jackify);
+
+
+
 
 // 1. FILTERING OUT ELEMENTS THAT DON'T PASS A TEST
 // SET UP THE FILTER FUNCTION (it applies the 'test' to the array and then pushes all those records that pass the test to a new array called 'passed')
@@ -71,14 +114,14 @@ var ancestry = JSON.parse(ANCESTRY_FILE);
 //   return person.father == "Carel Haverbeke";
 // }));
 
-// // or this:
+// or this:
 
 // console.log(ancestry.filter(function(person) {
 //   return person.born > 1900 && person.born < 1925;
 // }));
 
 // 2. TRANSFORMING WITH MAP
-// The MAP method transforms an array by applying a function to all its elements and building a new array from the returned values. The new array it creates will have the same length as the input but array but its contents will have been mapped to a new form by the function.
+// The MAP method transforms an array by applying a function to all its elements and building a new array from the returned values. The new array it creates will have the same length as the input array but its contents will have been mapped to a new form by the function.
 
 // function map(array, transform) {
 //   var mapped = [];
@@ -113,7 +156,7 @@ var ancestry = JSON.parse(ANCESTRY_FILE);
 //   return a + b;
 // }, 0));
 
-// current starts as 0. A for loop then goes through the array upto its length. During each 'pass' it recomputes the value of 'current' by passing it to the combine function as a parameter along with the current value in the array. In essence it's adding all the array value together, just in a nifty and clever way. In other words, the 'combine' function is invokled during every 'pass' though the for loop and changes the value of 'current'. this works because 'current' takes the returned value from combine as its new value at each pass.
+// current starts as 0. A for loop then goes through the array upto its length. During each 'pass' it recomputes the value of 'current' by passing it to the combine function as a parameter along with the current value in the array. In essence it's adding all the array value together, just in a nifty and clever way. In other words, the 'combine' function is invoked during every 'pass' though the for loop and changes the value of 'current'. this works because 'current' takes the returned value from combine as its new value at each pass.
 
 // As with forEach, filter and map, reduce is also a standard method on arrays. It has the added convenience that if your array has at least one element you can leave the 'start' parameter out as it will automatically take the first element as the start value.
 
@@ -124,9 +167,9 @@ var ancestry = JSON.parse(ANCESTRY_FILE);
 //   else return min;
 // }));
 
-// basically goes through the array comparing them until it's left with the oldest - it compares cur to min and if cur is less than min it become cur
+// basically goes through the array comparing them until it's left with the oldest - it compares cur to min and if cur is less than min it become min
 
-// to do it without higher order functions isn;t a biggie - code doesn;t look much worse:
+// to do it without higher order functions isn't a biggie - code doesn't look much worse:
 
 // var min = ancestry[0];
 // for (var i = 1; i < ancestry.length; i++) {
@@ -143,8 +186,7 @@ var ancestry = JSON.parse(ANCESTRY_FILE);
 // The return value of the function is stored in an accumulator (result/total).
 
 
-// Higher order functions shine when you need to compose functions, as follows
-
+// Higher order functions shine when you need to *compose* functions, as follows
 
 // function average(array) {
 //   function plus(a, b) { return a + b; }
@@ -153,6 +195,7 @@ var ancestry = JSON.parse(ANCESTRY_FILE);
 
 // takes the array as an argument and uses reduce to add all the ages together - then divides this by the length of the array thus getting the average number
 
+// filters and maps:
 // function age(p) { return p.died - p.born; }
 // function male(p) { return p.sex == "m"; }
 // function female(p) { return p.sex == "f"; }
@@ -202,7 +245,7 @@ ancestry.forEach(function(person) {
 // console.log(byName["Philibert Haverbeke"]);
 
 // 2. What we're actually going to do here is calculate a 'dna value' for a given person by calculating the values for their parents and so on down the line to the ancestor.
-// The function below is about finding out who the parents are - it does this using a function called 'valueFor' which, via the gift of recursion, follows the family tree(?) 
+// The function below is about finding out who the parents are - it does this using a function called 'valueFor' which, via the gift of recursion, follows the family tree(?) We hand it a person and it takes it from there, returning a set of parameters to go into another function (sharedDNA) which we add as a parameter to the original function call.
 
 function reduceAncestors(person, f, defaultValue) {
   function valueFor(person) {
@@ -215,7 +258,7 @@ function reduceAncestors(person, f, defaultValue) {
   return valueFor(person);
 }
 
-// 3. The actual calculation of DNA is done by a third funciton sharedDNA
+// // 3. The actual calculation of DNA is done by a third function sharedDNA
 
 function sharedDNA(person, fromMother, fromFather) {
   if (person.name == "Pauwels van Haverbeke") // original old ancestor bloke
@@ -226,6 +269,7 @@ function sharedDNA(person, fromMother, fromFather) {
 }
 
 var ph = byName["Philibert Haverbeke"]; // modern bloke
+
 console.log(reduceAncestors(ph, sharedDNA, 0) / 4);
 
 // returned value f -> sharedDNA in reduceAncestors function call. sharedDNA also acts recursively to trace back through the ancestral tree. This is NOT done by forEach. forEach merely gets the record for the person we want.
@@ -238,3 +282,82 @@ console.log(reduceAncestors(ph, sharedDNA, 0) / 4);
 // the value for person is generated by a forEach loop working on the ancestry dataset.
 
 // reduceAncestors ontains another function, valueFor which recursively goes back through the family tree. Each time it does this, ity calls the sharedDNA function which calculates the amount of shared DNA with some simple mathmatics and returns the value to the outer function. It also acts as a 'brake' by returning '0' wheh there are no ancestors left. The outer function, reduceAncestors, will then return a final value.
+
+// Here's an example of how we can reuse the reduce ancestors function for different purposes.
+// var byName = {};
+// ancestry.forEach(function(person) {
+//   byName[person.name] = person;
+// });
+
+// function reduceAncestors(person, f, defaultValue) {
+//   function valueFor(person) {
+//     if (person == null) {
+//       return defaultValue;
+//     } else {
+//       return f(person, valueFor(byName[person.mother]), valueFor(byName[person.father]));
+//     }
+//   }
+//   return valueFor(person);
+// }
+
+
+// function countAncestors(person, test) {
+
+//   function combine(current, fromMother, fromFather) {
+//     var thisOneCounts = current != person && test(current);
+    
+//     return fromMother + fromFather + (thisOneCounts ? 1 : 0);
+//   }
+
+//   return reduceAncestors(person, combine, 0);
+// }
+
+
+
+// function longLivingPercentage(person) {
+
+//   var all = countAncestors(person, function(person) {
+//     return true;
+//   });
+
+//   var longLiving = countAncestors(person, function(person) {
+//     return (person.died - person.born) >= 70;
+//   });
+
+//   return longLiving / all;
+
+// }
+
+
+// console.log(longLivingPercentage(byName["Philibert Haverbeke"]));
+/*
+longLiving longLivingPercentage
+{
+  all = countAncestors{}
+  
+}
+
+*/
+
+
+// 4. BINDINGS
+// var theSet = ["Carel Haverbeke", "Maria van Brussel", "Donald Duck"];
+
+// function isInSet(set, person) {
+//   return set.indexOf(person.name) > -1;
+// }
+
+// console.log(ancestry.filter(function(person) {
+//   return isInSet(theSet, person);
+// }));
+
+// console.log(ancestry.filter(isInSet.bind(null, theSet))); // calls isInTheSet with theSet as its first argument along with any other arguments given to the bound function (so, why?) I guess the reason is so you can use it over and over as below?
+
+// var boundSet = ancestry.filter(isInSet.bind(null, theSet));
+// console.log(boundSet);
+
+// Being able to pass function values to other functions is not just a gimmick but a deeply useful aspect of JavaScript. It allows us to write computations with “gaps” in them as functions and have the code that calls these functions fill in those gaps by providing function values that describe the missing computations.
+
+// Arrays provide a number of useful higher-order methods—forEach to do something with each element in an array, filter to build a new array with some elements filtered out, map to build a new array where each element has been put through a function, and reduce to combine all an array’s elements into a single value.
+
+// Functions have an apply method that can be used to call them with an array specifying their arguments. They also have a bind method, which is used to create a partially applied version of the function.
