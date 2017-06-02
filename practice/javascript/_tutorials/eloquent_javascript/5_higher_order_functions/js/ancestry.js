@@ -89,6 +89,96 @@ function logEach(array){
 
 // jackisms.forEach(jackify);
 
+// HIGHER ORDER FUNCTIONS - TAKE OTHER FUNCTIONS AS VALUES OR RETURN OTHER FUNCTIONS
+// 1. FUNCTIONS THAT CREATE NEW FUNCTIONS:
+// function greaterThan(n){
+//   return function(m) { return m > n };
+// }
+
+// var greaterThan10 = greaterThan(10);
+// console.log(greaterThan10(11));
+// console.log(greaterThan(15)(2));
+
+// Explain what happened here:
+/*
+function greaterThan takes one parameter, a number, 'n'
+it returns an anonymous function which takes one parameter, a number, 'm'
+the anonymous function compares m to name
+In order to use the inner function you have to first assign an instance of the outer function, greaterThan, with a value, to a variable
+You can then access the inner function by invoking the newly created instance of greaterThan via the variable and assigning it a value.
+You can also call the two functions one after the other as per the second example.
+*/
+
+// What applications does this functionality have?
+/*
+
+*/
+
+// 2. FUNCTIONS THAT CHANGE OTHER FUNCTIONS:
+// function noisy(f) {
+//   return function(arg) {
+//     console.log("Calling with", arg);
+//     var val = f(arg);
+//     console.log("Called with", arg, "- got", val);
+//     return val;
+//   };
+// }
+
+// noisy(Boolean)(1);
+
+// Explain what happened here:
+/*
+function "noisy" takes one parameter, a function.
+It returns an anonymous function which takes one parameter, "arg"
+The anionymous function assigns arg to the parameter function as a parameter of its own and assigns the whole to a variable, 'val' which it returns.
+*/
+
+// What applications does this functionality have?
+/*
+
+*/
+
+// 3. FUNCTIONS THAT CREATE NEW TYPES OF CONTROL FLOW
+function unless(test, then) {
+  if (!test) then();
+}
+
+function repeat(times, body) {
+  for (var i = 0; i < times; i++) {
+    body(i);
+  }
+}
+
+repeat(3, function(n) {
+  unless (n % 2, function(){
+    console.log(n, "is even");
+  });
+});
+
+
+// Explain what happened here:
+/*
+THE SET UP
+----------
+function "unless" takes two parameters both of which are functions: "test" and "then"
+It checks if the test function returns a Boolean of true, if not it calls the "then" function.
+
+function "repeat" takes two parameters: "times" which tells the for loop contained within it how many times to iterate and "body" a function which is enacted on the for loop's iterator at each pass.
+
+
+
+THE CALL
+--------
+function "repeat" is then called with "times" equal to 3 and an anonymous function which calls "unless", passing it the 'n' parameter. "unless" in the call takes two parameters, a test condition "n % 2" which checks whether n divided by 2 has any remainder. If it does, then the test fails and the "then" parameter, an anonymous function which logs a message to the console, is invoked.
+
+NB - because the inner function lives within the environment of the outer one it can use 'n'. Scoping.
+*/
+
+// What applications does this functionality have?
+/*
+carries out a test as many times as you wish it to
+*/
+
 
 
 
@@ -247,30 +337,30 @@ ancestry.forEach(function(person) {
 // 2. What we're actually going to do here is calculate a 'dna value' for a given person by calculating the values for their parents and so on down the line to the ancestor.
 // The function below is about finding out who the parents are - it does this using a function called 'valueFor' which, via the gift of recursion, follows the family tree(?) We hand it a person and it takes it from there, returning a set of parameters to go into another function (sharedDNA) which we add as a parameter to the original function call.
 
-function reduceAncestors(person, f, defaultValue) {
-  function valueFor(person) {
-    if (person == null) {
-      return defaultValue;
-    } else {
-      return f(person, valueFor(byName[person.mother]), valueFor(byName[person.father]));
-    }
-  }
-  return valueFor(person);
-}
+// function reduceAncestors(person, f, defaultValue) {
+//   function valueFor(person) {
+//     if (person == null) {
+//       return defaultValue;
+//     } else {
+//       return f(person, valueFor(byName[person.mother]), valueFor(byName[person.father]));
+//     }
+//   }
+//   return valueFor(person);
+// }
 
-// // 3. The actual calculation of DNA is done by a third function sharedDNA
+// // // 3. The actual calculation of DNA is done by a third function sharedDNA
 
-function sharedDNA(person, fromMother, fromFather) {
-  if (person.name == "Pauwels van Haverbeke") // original old ancestor bloke
-    return 1;
-  else
-    return (fromMother + fromFather) / 2;
-    // starts with whoever it is and goes back cutting the amount of dna in half each time.
-}
+// function sharedDNA(person, fromMother, fromFather) {
+//   if (person.name == "Pauwels van Haverbeke") // original old ancestor bloke
+//     return 1;
+//   else
+//     return (fromMother + fromFather) / 2;
+//     // starts with whoever it is and goes back cutting the amount of dna in half each time.
+// }
 
-var ph = byName["Philibert Haverbeke"]; // modern bloke
+// var ph = byName["Philibert Haverbeke"]; // modern bloke
 
-console.log(reduceAncestors(ph, sharedDNA, 0) / 4);
+// console.log(reduceAncestors(ph, sharedDNA, 0) / 4);
 
 // returned value f -> sharedDNA in reduceAncestors function call. sharedDNA also acts recursively to trace back through the ancestral tree. This is NOT done by forEach. forEach merely gets the record for the person we want.
 // in other words the returned function f isolates a person and then gets thew value for the mother and the father, it then takes each of these as the 'person' and isolates values for their father and mother etc etc if it equates to null, ie there are no more fathers and mothers, it returns the given default vale which is 0. The upshot is that it goes back through the family tree until there are no more ancestors. This recursion is, if you like, the 'base process' of the function.

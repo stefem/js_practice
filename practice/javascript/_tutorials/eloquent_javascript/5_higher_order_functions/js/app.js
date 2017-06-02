@@ -52,16 +52,16 @@ var ancestry = JSON.parse(ANCESTRY_FILE);
 // EX 1. FLATTENING:
 // Use the reduce method in combination with the concat method to “flatten” an array of arrays into a single array that has all the elements of the input arrays.
 
-var arrays = [[1, 2, 3], [4, 5], [6]];
+// var arrays = [[1, 2, 3], [4, 5], [6]];
 
-function outer(array) {
-  function concatenate(a, b) { 
-      return a.concat(b); 
-  }
-  return array.reduce(concatenate);
-}
+// function outer(array) {
+//   function concatenate(a, b) { 
+//       return a.concat(b); 
+//   }
+//   return array.reduce(concatenate);
+// }
 
-console.log(outer(arrays));
+// console.log(outer(arrays));
 
 // → [1, 2, 3, 4, 5, 6]
 
@@ -80,31 +80,80 @@ console.log(outer(arrays));
 
 // 1. Cycle through the dataset and see who has a mother in the dataset - return true or false
 
-var hasMother = [];
-var byName = {};
+// var hasMother = [];
+// var byName = {};
 
-function average(array) {
-  function plus(a, b) { return a + b; }
-  return array.reduce(plus) / array.length;
-} 
+// function average(array) {
+//   function plus(a, b) { return a + b; }
+//   return array.reduce(plus) / array.length;
+// } 
 
-ancestry.forEach(function(person) {
-  byName[person.name] = person;
-});
+// ancestry.forEach(function(person) {
+//   byName[person.name] = person;
+// });
 
-ancestry.filter(function(person) {
-    if (person.mother && byName[person.mother]) {
-        mother = byName[person.mother];
-        var ageDiff = person.born - mother.born;
-        return hasMother.push(ageDiff);
-    }
-});  
+// ancestry.filter(function(person) {
+//     if (person.mother && byName[person.mother]) {
+//         mother = byName[person.mother];
+//         var ageDiff = person.born - mother.born;
+//         return hasMother.push(ageDiff);
+//     }
+// });  
 
 // console.log (average(hasMother));
-console.log (Math.round(average(hasMother) * 100) / 100);
+// console.log (Math.round(average(hasMother) * 100) / 100);
 
 // EX 3. HISTORICAL LIFE EXPECTANCY
 // Using the ex
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// GENERAL OTHER STUFF
+// forEach
+// function forEach(array, action){
+//   for (var i = 0; i < array.length; i++)
+//   action(array[i]);
+// }
+
+// var numbers  = [1,2,3,4,5], sum = 0;
+
+// forEach(numbers, function(number){
+//   console.log(sum += number);
+// });
+
+// numbers.forEach(function(number){
+//   console.log(sum += number);
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
